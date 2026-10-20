@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+.venv/
+venv/
+myenv/
+env/
+
+# Django
+db.sqlite3
+staticfiles/
+
+# Secrets
+.env
+.env.*
+TS/backup.json
+
+# IDE
+.idea/
+.vscode/
