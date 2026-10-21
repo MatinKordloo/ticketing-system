@@ -1,19 +1,27 @@
+<!-- Use the shared base template -->
 {% extends 'tickets/base.html' %}
 
+<!-- Set the page title -->
 {% block title %}Ticket List{% endblock %}
 
+<!-- Start the page content -->
 {% block content %}
 
+<!-- Display the page heading and create-ticket button -->
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="h2">Ticket List</h1>
 
+    <!-- Open the page for creating a new ticket -->
     <a href="{% url 'ticket_create' %}" class="btn btn-primary">
         Create Ticket
     </a>
 </div>
 
+<!-- Submit filtering and sorting options using GET -->
 <form method="get" class="card card-body mb-4">
     <div class="row g-3">
+
+        <!-- Filter tickets by status -->
         <div class="col-md-4">
             <label for="status" class="form-label">Status</label>
             <select name="status" id="status" class="form-select">
@@ -24,6 +32,7 @@
             </select>
         </div>
 
+        <!-- Filter tickets by priority -->
         <div class="col-md-4">
             <label for="priority" class="form-label">Priority</label>
             <select name="priority" id="priority" class="form-select">
@@ -34,6 +43,7 @@
             </select>
         </div>
 
+        <!-- Choose how tickets should be sorted -->
         <div class="col-md-4">
             <label for="sort" class="form-label">Sort by</label>
             <select name="sort" id="sort" class="form-select">
@@ -43,41 +53,53 @@
         </div>
     </div>
 
+    <!-- Apply the selected filters or reset them -->
     <div class="mt-3">
         <button type="submit" class="btn btn-primary">Apply filters</button>
         <a href="{% url 'ticket_list' %}" class="btn btn-secondary">Reset</a>
     </div>
 </form>
 
+<!-- Display each ticket in its own card -->
 {% for ticket in tickets %}
     <div class="card mb-3 shadow-sm">
         <div class="card-body">
-            <h5 class="card-title">{{ ticket.title }}</h5>
 
+            <!-- Display the ticket title and description -->
+            <h5 class="card-title">{{ ticket.title }}</h5>
             <p class="card-text">{{ ticket.description }}</p>
 
+            <!-- Display the ticket priority -->
             <p class="mb-1">
                 <strong>Priority:</strong> {{ ticket.get_priority_display }}
             </p>
 
+            <!-- Display the ticket status -->
             <p class="mb-2">
                 <strong>Status:</strong> {{ ticket.status }}
             </p>
 
+            <!-- Display when the ticket was created -->
             <small class="text-muted">
                 Created: {{ ticket.created_at }}
             </small>
 
+            <!-- Provide buttons to edit or delete the ticket -->
             <div class="mt-3 d-flex gap-2">
+
+                <!-- Open the edit page for this ticket -->
                 <a href="{% url 'ticket_edit' ticket.id %}"
                    class="btn btn-warning btn-sm">
                     Edit Ticket
                 </a>
 
+                <!-- Send a POST request to delete this ticket after confirmation -->
                 <form method="post"
                       action="{% url 'ticket_delete' ticket.id %}"
                       onsubmit="return confirm('Are you sure you want to delete this ticket?');">
+
                     {% csrf_token %}
+
                     <button type="submit" class="btn btn-danger btn-sm">
                         Delete Ticket
                     </button>
@@ -85,10 +107,13 @@
             </div>
         </div>
     </div>
+
+<!-- Display a message if no tickets match the filters -->
 {% empty %}
     <div class="alert alert-info">
         No tickets match your filters.
     </div>
 {% endfor %}
 
+<!-- End the page content -->
 {% endblock %}
